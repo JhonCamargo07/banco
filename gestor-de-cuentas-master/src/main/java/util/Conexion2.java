@@ -7,7 +7,7 @@ import java.util.logging.*;
  *
  * @author Sena
  */
-public class Conexion {
+public class Conexion2 {
     //    //Declarar variables
     private String driver, userDB, passwordDB, dataBase, urlDB;
 
@@ -15,7 +15,7 @@ public class Conexion {
     private Connection conexion;
 
     //Constructor.
-    public Conexion() {
+    public Conexion2() {
 
         // Asignar valores
         driver = "com.mysql.cj.jdbc.Driver";
@@ -54,7 +54,6 @@ public class Conexion {
         return conexion;
     }
     public Connection close(Connection conn){
-        this.close();
         try {
             conn.close();
         } catch (SQLException ex) {
@@ -68,3 +67,4 @@ public class Conexion {
         new Conexion();
     }
 }
+

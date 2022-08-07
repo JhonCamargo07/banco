@@ -84,7 +84,7 @@ public class CuentaDAO extends Conexion {
         } //
         finally {
             try {
-                this.close();
+                this.close(conn);
             } catch (Exception e) {
                 Logger.getLogger(CuentaDAO.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -163,7 +163,7 @@ public class CuentaDAO extends Conexion {
             Logger.getLogger(CuentaDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             //Sentencia para que independientemnte de lo que pase haga eso
-            this.close();
+            this.close(conn);
         }
         return cuentaVO;
 
@@ -196,7 +196,7 @@ public class CuentaDAO extends Conexion {
 
         } finally {
             //Sentencia para que independientemnte de lo que pase haga eso
-            this.close();
+            this.close(conn);
         }
 
 
@@ -229,7 +229,7 @@ public class CuentaDAO extends Conexion {
 
         } finally {
             //Sentencia para que independientemnte de lo que pase haga eso
-            this.close();
+            this.close(conn);
         }
 
         return listaCuentas;

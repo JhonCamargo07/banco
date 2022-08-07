@@ -134,7 +134,7 @@ public class ClienteDAO extends Conexion {
     
     public boolean update(ClienteVO clienteVo) {
 
-        sql = "UPDATE cliente SET cedulacliente = ?, nombre = ?, telefono = ? = WHERE idcliente = ?";
+        sql = "UPDATE cliente SET cedulacliente = ?, nombre = ?, telefono = ? WHERE idcliente = ?";
 
         try {
             conn = this.getConnection();
