@@ -27,11 +27,11 @@ public class Conexion {
         return dataSource;
     }
     
-    public static Connection getConnection() throws SQLException{
+    public Connection getConnection() throws SQLException{
         return getDataSource().getConnection();
     }
     
-    public static void close(ResultSet rs){
+    public void close(ResultSet rs){
         try {
             rs.close();
         } catch (SQLException ex) {
@@ -39,7 +39,7 @@ public class Conexion {
         }
     }
     
-    public static void close(PreparedStatement stmt){
+    public void close(PreparedStatement stmt){
         try {
             stmt.close();
         } catch (SQLException ex) {
@@ -47,7 +47,7 @@ public class Conexion {
         }
     }
     
-    public static void close(Connection conn){
+    public void close(Connection conn){
         try {
             conn.close();
         } catch (SQLException ex) {

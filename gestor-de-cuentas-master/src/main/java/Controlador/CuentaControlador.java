@@ -5,7 +5,10 @@
 package Controlador;
 
 import ModeloDAO.CuentaDAO;
+import ModeloDAO.PruebaCuentaDAO;
+import ModeloVO.ClienteVO;
 import ModeloVO.CuentaVO;
+import ModeloVO.UsuarioVO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -48,10 +51,14 @@ public class CuentaControlador extends HttpServlet {
         //Datos cliente
         String idcliente = request.getParameter("txtidCliente");
         String cedulaCliente = request.getParameter("txtCedula");
-        String nombre = request.getParameter("txtNombre");
-        String telefono = request.getParameter("txtTeleofono");
+        String telefono = request.getParameter("txtTelefono");
         String idcuenta = request.getParameter("txtIdCuenta");
         String idusuario = request.getParameter("txtIdUsaurio");
+
+        String idUsuario = request.getParameter("txtIdUsuario");
+        String login = request.getParameter("txtlogin");
+        String password = request.getParameter("txtpassword");
+        String idrol = request.getParameter("txtIdRol");
 
         int opcion = Integer.parseInt(request.getParameter("opcion"));
 
@@ -60,17 +67,32 @@ public class CuentaControlador extends HttpServlet {
 
         CuentaDAO cuentadao = new CuentaDAO(cuentavo);
 
+        ClienteVO clienteVO = new ClienteVO(idcliente, cedulaCliente, titular, telefono, idcuenta, idUsuario);
+        UsuarioVO usuVO = new UsuarioVO(idUsuario, login, password, idrol);
+
         //Administrar Operaciones
         switch (opcion) {
             case 1:
-                //Agrgar Cuenta
 
-                if (cuentadao.agregarCuenta() > 0) {
+                PruebaCuentaDAO pruebadao = new PruebaCuentaDAO();
 
-                    request.setAttribute("mensajeExito", "La cuenta se registro ");
+                //Si cuenta no existe continuamos
+                if (!cuentadao.cuentaYaExiste(cuentavo.getNumeroCuenta())) {
+
+                    if (pruebadao.crearCuenta(cuentavo, clienteVO, usuVO)) {
+
+                        request.setAttribute("titulo", "Cuenta Registrada ");
+                        request.setAttribute("mensaje", "La cuenta se registro correctamente");
+
+                    } else {
+                        request.setAttribute("titulo", "Cuenta no registrada");
+                        request.setAttribute("mensaje", "La cuenta no se registro correctamente :(");
+                    }
 
                 } else {
-                    request.setAttribute("mensajeError", "El cuenta no se registro :(");
+
+                    request.setAttribute("titulo", "Error");
+                    request.setAttribute("mensaje", "Esta cuenta ya existe");
                 }
 
                 request.getRequestDispatcher("registroCuenta.jsp").forward(request, response);
@@ -93,10 +115,9 @@ public class CuentaControlador extends HttpServlet {
 
                 cuentavo = cuentadao.consultarCuenta(estado);
 
-                if (cuentavo !=null) {
+                if (cuentavo != null) {
 
-
-                  request.setAttribute("CuentaConsultada", cuentavo);
+                    request.setAttribute("CuentaConsultada", cuentavo);
                     request.getRequestDispatcher("consultarCuenta.jsp").forward(request, response);
 
                 } else {

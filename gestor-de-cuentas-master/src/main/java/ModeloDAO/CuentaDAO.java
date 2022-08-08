@@ -142,6 +142,29 @@ public class CuentaDAO extends Conexion {
         return operacionExitosa;
     }
     
+    public boolean delete(String id) {
+
+        sql = "DELETE FROM cuenta WHERE idcuenta = ?";
+
+        try {
+            conn = this.getConnection();
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, id);
+            puente.executeUpdate();
+
+            operacionExitosa = true;
+
+        } catch (SQLException ex) {
+            operacionExitosa = false;
+            System.out.println("Ocurrió un error al eliminar la cuenta: " + ex.toString());
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close(conn);
+        }
+
+        return operacionExitosa;
+    }
+    
     
     public CuentaVO consultarCuenta(String estado) throws SQLException {
 

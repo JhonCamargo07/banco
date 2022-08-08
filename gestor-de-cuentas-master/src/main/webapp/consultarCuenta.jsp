@@ -67,7 +67,6 @@
                     <th scope="col">FECHAAPERTURA</th>
                     <th scope="col">ESTADO</th>
                     <th class="text-center" scope="col">EDITAR</th>
-                    <th class="text-center" scope="col">ELIMINAR</th>
 
 
                 </tr>
@@ -90,7 +89,6 @@
                     <td><%=cuentavo.getFechaApertura()%></td>
                     <td><%=cuentavo.getEstado()%></td>
                     <td class="text-center"><i class="fas fa-edit text-info"></i></td>
-                    <td class="text-center"><i  class="fas fa-trash text-danger"></i></td>
                 </tr>
                 <%}%>
             </table>

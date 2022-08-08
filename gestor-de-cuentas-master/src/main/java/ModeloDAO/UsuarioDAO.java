@@ -75,5 +75,30 @@ public class UsuarioDAO extends Conexion {
 
         return operacionExitosa;
     }
+    
+    
+    // Método para eliminar el usuario
+    public boolean delete(String id) {
+        sql = "DELETE FROM usuario WHERE idUsuario = ?";
+
+        try {
+            conn = this.getConnection();
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, id);
+            puente.executeUpdate();
+
+            // Si se logra eliminar, se cambia el valor de la operacion 
+            operacionExitosa = true;
+            
+        } catch (SQLException ex) {
+            operacionExitosa = false;
+            System.out.println("Ocurrió un error al eliminar el usuario: " + ex.toString());
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close(conn);
+        }
+
+        return operacionExitosa;
+    }
 
 }

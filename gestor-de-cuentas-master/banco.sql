@@ -1,7 +1,7 @@
 --
 -- Base de datos: `banco`
 --
-
+-- DROP DATABASE IF EXISTS banco;
 CREATE DATABASE banco;
 USE banco;
 
@@ -72,19 +72,20 @@ REFERENCES USUARIO(IDUSUARIO);
 ALTER table cliente 
 ADD CONSTRAINT cliente_usuario
 FOREIGN KEY (IDUSUARIO)
-REFERENCES USUARIO(IDUSUARIO);
+REFERENCES USUARIO(IDUSUARIO) ON DELETE CASCADE;
 
 
 ALTER table cliente 
 ADD CONSTRAINT cliente_cuenta
 FOREIGN KEY (IDCUENTA)
-REFERENCES cuenta(idcuenta);
+REFERENCES cuenta(idcuenta) ON DELETE CASCADE;
 
 ALTER table usuario 
 ADD CONSTRAINT usuario_rol
 FOREIGN KEY (IDROL)
 REFERENCES rol(idROL);
 
+INSERT INTO rol VALUES (null, 'Administrador'),(null, 'cliente');
 
 INSERT INTO `cuenta`(`NUMEROCTA`, `TITULAR`, `SALDO`, `FECHAAPERTURA`, `ESTADO`) VALUES ('123','Prueba','3120000', now(),'Abierta');
 

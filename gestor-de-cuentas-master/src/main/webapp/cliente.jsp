@@ -54,7 +54,14 @@
 
                     <td class="text-center"><button type="submit" class="bg-transparent border-0"><i class="fas fa-edit text-info"></i></button></td>
                 </form>
+                
+                <form action="${pageContext.request.contextPath}/Cliente" method="POST">
+                    <input type="hidden" name="idCliente" value="<%= clienteVo.getIdCliente()%>">
+                    <input type="hidden" name="cedulaCliente" value="<%= clienteVo.getCedulaCliente() %>">
+                    <input type="hidden" name="opcion" value="3">
+
                 <td class="text-center"><button type="buttom" class="bg-transparent border-0"><i class="fas fa-trash text-danger"></i></button></td>
+                </form>
                 </tr>
                 <%
                     }
@@ -65,4 +72,5 @@
     </body>
 </html>
 <jsp:include page="WEB-INF/paginas/comunes/editarCliente.jsp" />
+<jsp:include page="WEB-INF/paginas/comunes/eliminarCliente.jsp" />
 <jsp:include page="WEB-INF/paginas/comunes/alerta.jsp" />
