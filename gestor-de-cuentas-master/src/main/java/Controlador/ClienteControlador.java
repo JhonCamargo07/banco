@@ -24,6 +24,7 @@ public class ClienteControlador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        this.doPost(request, response);
     }
 
     @Override
@@ -49,7 +50,6 @@ public class ClienteControlador extends HttpServlet {
                 this.actualizarCliente(request, response);
                 break;
             case 3: // Consultar por cedula
-                clienteVo.setIdCliente(idCliente);
                 clienteVo.setCedulaCliente(cedulaCliente);
                 this.consultarClientePorCedula(request, response);
                 break;
@@ -91,7 +91,7 @@ public class ClienteControlador extends HttpServlet {
    
     // Método para consultar los clientes (por cedula) antes de eliminarlos 
     private void consultarClientePorCedula(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        clienteVo = clienteDao.selectByIdAndCC(clienteVo.getIdCliente(), clienteVo.getCedulaCliente());
+        clienteVo = clienteDao.selectByCC(clienteVo.getCedulaCliente());
         
         if(clienteVo != null){
             request.setAttribute("cliente", clienteVo);

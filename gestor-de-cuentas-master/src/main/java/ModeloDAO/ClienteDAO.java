@@ -79,16 +79,15 @@ public class ClienteDAO extends Conexion {
 
     }
     
-    public ClienteVO selectByIdAndCC(String id, String cedulaCliente) {
+    public ClienteVO selectByCC(String cedulaCliente) {
         ClienteVO clienteVo = null;
 
-        sql = "SELECT * FROM cliente WHERE IDCLIENTE = ? AND cedulacliente = ?";
+        sql = "SELECT * FROM cliente WHERE cedulacliente = ?";
 
         try {
             conn = this.getConnection();
             puente = conn.prepareStatement(sql);
-            puente.setString(1, id);
-            puente.setString(2, cedulaCliente);
+            puente.setString(1, cedulaCliente);
             mensajero = puente.executeQuery();
 
             if (mensajero.next()) {

@@ -3,7 +3,7 @@
     Created on : 6/08/2022, 09:47:49 PM
     Author     : karen_b
 --%>
-
+<%@include file="cache.jsp" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="ModeloDAO.CuentaDAO"%>
 <%@page import="ModeloVO.CuentaVO"%>

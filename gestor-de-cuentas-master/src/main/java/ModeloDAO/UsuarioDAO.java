@@ -101,4 +101,33 @@ public class UsuarioDAO extends Conexion {
         return operacionExitosa;
     }
 
+    public UsuarioVO login(String login, String password) {
+        
+        UsuarioVO usuarioVo = null;
+        
+        sql = "SELECT * FROM usuario WHERE BINARY login = ? AND BINARY password = ?";
+
+        try {
+            conn = this.getConnection();
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, login);
+            puente.setString(2, password);
+            mensajero = puente.executeQuery();
+
+            // Si encuentra los datos, se guardan en un VO 
+            if (mensajero.next()){
+                usuarioVo = new UsuarioVO(mensajero.getString(1), mensajero.getString(2), mensajero.getString(3), mensajero.getString(4));
+            }
+            
+        } catch (SQLException ex) {
+            operacionExitosa = false;
+            System.out.println("Ocurrió un error en el login: " + ex.toString());
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close(conn);
+        }
+
+        return usuarioVo;
+    }
+
 }
