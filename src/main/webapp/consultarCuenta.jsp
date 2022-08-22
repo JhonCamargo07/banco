@@ -19,6 +19,7 @@
 
     </head>
     <body>
+        <jsp:include page="WEB-INF/paginas/comunes/navbar.jsp" />
         <form method="post" action="Cuenta">
             <center>
                 <div class="form-group">
@@ -34,9 +35,7 @@
                 </div>
         </form><br>
 
-        <%
-
-            if (request.getAttribute("mensajeError") != null) { %>
+        <%            if (request.getAttribute("mensajeError") != null) { %>
         <h5>
             ${mensajeError} 
         </h5>
@@ -47,9 +46,9 @@
 
         </h5>
         <% }%>
-        
-        
-        
+
+
+
 
         <%
             if (request.getAttribute("CuentaConsultada") != null) {
@@ -88,7 +87,13 @@
                     <td><%=cuentavo.getSaldo()%></td>
                     <td><%=cuentavo.getFechaApertura()%></td>
                     <td><%=cuentavo.getEstado()%></td>
-                    <td class="text-center"><i class="fas fa-edit text-info"></i></td>
+                <form action="Cuenta" method="post">
+                    <input type="hidden" name="txtidCuenta" value="<%=cuentavo.getIdCuenta()%>">
+                    <input type="hidden" name="opcion" value="4">
+
+                    <td class="text-center"><button type="submit" class="bg-transparent border-0"><i class="fas fa-edit text-info"></i></button></td>
+                </form>
+
                 </tr>
                 <%}%>
             </table>
@@ -96,6 +101,6 @@
 
             <%}%>    
         </div>
-
+        <jsp:include page="WEB-INF/paginas/comunes/footer.jsp" />
     </body>
 </html>

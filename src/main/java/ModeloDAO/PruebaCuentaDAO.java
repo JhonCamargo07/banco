@@ -56,5 +56,22 @@ public class PruebaCuentaDAO extends Conexion {
 
         return operacionExitosa;
     }
+    
+    public Object[] consultarDatosCliente(String idUsuario){
+        // Se crea un array para luego asignarle los objetos
+        Object[] datosCliente = null;
+        
+        // Instancias necesarias
+        CuentaVO cuentaVo = null;
+        ClienteVO clienteVo = null;
+        
+        // Se obtiene los datos de la consulta
+        clienteVo = clientedao.selectByIdUsuario(idUsuario);
+        cuentaVo = cuentadao.consultarCuentaPorId(clienteVo.getIdCuenta());
+        
+        // Se asignan los objetos al array
+        datosCliente = new Object[]{cuentaVo, clienteVo};
+        return datosCliente;
+    }
 
 }

@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -60,10 +61,12 @@ public class CuentaControlador extends HttpServlet {
         String password = request.getParameter("txtpassword");
         String idrol = request.getParameter("txtIdRol");
 
+        String valorARetirar = request.getParameter("catidadRetirar");
+
         int opcion = Integer.parseInt(request.getParameter("opcion"));
 
         //Instanciar clase VO/DAO cuenta
-        CuentaVO cuentavo = new CuentaVO(idcuenta, numcuenta, titular, saldo, fechaApertura, estado);
+        CuentaVO cuentavo = new CuentaVO(idCuenta, numcuenta, titular, saldo, fechaApertura, estado);
 
         CuentaDAO cuentadao = new CuentaDAO(cuentavo);
 
@@ -98,9 +101,9 @@ public class CuentaControlador extends HttpServlet {
                 request.getRequestDispatcher("registroCuenta.jsp").forward(request, response);
                 break;
 
-            case 2:
+            case 2: //Metodo actualizar
 
-                if (cuentadao.update()) {
+                if (cuentadao.update(cuentavo)) {
 
                     request.setAttribute("mensajeExito", "La cuenta se actualizo ");
 
@@ -108,7 +111,7 @@ public class CuentaControlador extends HttpServlet {
                     request.setAttribute("mensajeError", "El cuenta no se acualizo");
                 }
 
-                request.getRequestDispatcher(".jsp").forward(request, response);
+                request.getRequestDispatcher("consultarCuenta.jsp").forward(request, response);
                 break;
 
             case 3:
@@ -126,7 +129,41 @@ public class CuentaControlador extends HttpServlet {
 
                 }
                 break;
+            case 4: //Consulatr datos para actualizar
 
+                cuentavo = cuentadao.ActualizarCuenta(idCuenta);
+
+                if (cuentavo != null) {
+
+                    request.setAttribute("CuentaActualizada", cuentavo);
+                    request.getRequestDispatcher("actualizarCuenta.jsp").forward(request, response);
+
+                } else {
+                    request.setAttribute("mensajeError", "No hay cuentas por consultar");
+                    request.getRequestDispatcher("consultarCuenta.jsp").forward(request, response);
+
+                }
+                break;
+
+            case 5: // Retirar dinero
+                HttpSession sesion = request.getSession();
+                CuentaVO cuentaVo = (CuentaVO) sesion.getAttribute("cuenta");
+                float saldoTotal = Float.parseFloat(cuentaVo.getSaldo());
+                float saldoRetirar = Float.parseFloat(valorARetirar);
+                if (saldoRetirar <= saldoTotal) {
+
+                    if (cuentadao.retirarDinero(valorARetirar)) {
+                        sesion.setAttribute("titulo", "Registro exitosa");
+                        sesion.setAttribute("mensaje", "El dinero ya se restó, puede retirarlo en cualquier punto fisico de nuestra entidad");
+                    } else {
+                        sesion.setAttribute("titulo", "Ocurrió un error");
+                        sesion.setAttribute("mensaje", "No se puedo retirar el dinero, intentalo más tarde");
+                    }
+                } else {
+                    sesion.setAttribute("titulo", "Salso superado");
+                    sesion.setAttribute("mensaje", "La cantidad a retirar es mayor a la que tiene en su cuenta");
+                }
+                response.sendRedirect("menu.jsp");
         }
 
     }

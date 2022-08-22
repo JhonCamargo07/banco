@@ -104,6 +104,32 @@ public class ClienteDAO extends Conexion {
         return clienteVo;
 
     }
+    
+    public ClienteVO selectByIdUsuario(String idUsuario) {
+        ClienteVO clienteVo = null;
+
+        sql = "SELECT * FROM cliente WHERE idusuario = ?";
+
+        try {
+            conn = this.getConnection();
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, idUsuario);
+            mensajero = puente.executeQuery();
+
+            if (mensajero.next()) {
+                clienteVo = new ClienteVO(mensajero.getString(1), mensajero.getString(2), mensajero.getString(3), mensajero.getString(4), mensajero.getString(5), mensajero.getString(6));
+            }
+        } catch (SQLException ex) {
+            operacionExitosa = false;
+            System.out.println("Ocurrió un error: " + ex.toString());
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close(conn);
+        }
+
+        return clienteVo;
+
+    }
 
     // Método para saber si un usuario ya se encuentra registrado
     public boolean clienteYaExiste(String cedula) {

@@ -1,3 +1,9 @@
+<%
+    // Si la sesion ya esta abierta, lo lleva a menu
+    if (session.getAttribute("usuario") != null) {
+        response.sendRedirect("menu.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,6 +35,7 @@
                 <div class="col-md-3"></div>
             </div>
         </div>
+        <jsp:include page="WEB-INF/paginas/comunes/footer.jsp" />
     </body>
 </html>
 <jsp:include page="WEB-INF/paginas/comunes/alerta.jsp" />

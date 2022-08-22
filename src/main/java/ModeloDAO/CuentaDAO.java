@@ -117,7 +117,84 @@ public class CuentaDAO extends Conexion {
 
         return operacionExitosa;
     }
-    
+
+    public boolean update(CuentaVO cuentaVO) {
+
+        try {
+            sql = "UPDATE cuenta SET ESTADO=? WHERE IDCUENTA=?; ";
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, estado);
+            puente.setString(2, idCuenta);
+            puente.executeUpdate();
+            operacionExitosa = true;
+
+        } catch (SQLException e) {
+
+            Logger.getLogger(CuentaDAO.class.getName()).log(Level.SEVERE, null, e);
+
+        } finally {
+            //Sentencia para que independientemnte de lo que pase haga eso
+            try {
+
+                this.close(conn);
+            } catch (Exception e) {
+
+                Logger.getLogger(CuentaDAO.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+
+        return operacionExitosa;
+    }
+
+    public CuentaVO ActualizarCuenta(String Cuenta) {
+
+        CuentaVO cuentaVo = null;
+
+        try {
+            conn = this.getConnection();
+            sql = "SELECT * FROM cuenta WHERE IDCUENTA = ?";
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, Cuenta);
+            mensajero = puente.executeQuery();
+
+            if (mensajero.next()) {
+                cuentaVo = new CuentaVO(mensajero.getString("IDCUENTA"), mensajero.getString("NUMEROCTA"), mensajero.getString("TITULAR"), mensajero.getString("SALDO"), mensajero.getString("FECHAAPERTURA"), mensajero.getString("ESTADO"));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(CuentaDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            //Sentencia para que independientemnte de lo que pase haga eso
+            this.close(conn);
+        }
+        return cuentaVo;
+    }
+
+    // Método para obtener los datos de una cuenta
+    public CuentaVO consultarCuentaPorId(String idCuenta) {
+        CuentaVO cuentaVo = null;
+        sql = "SELECT * FROM cuenta WHERE idcuenta = ?";
+
+        try {
+            conn = this.getConnection();
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, idCuenta);
+            mensajero = puente.executeQuery();
+
+            if (mensajero.next()) {
+                cuentaVo = new CuentaVO(mensajero.getString(1), mensajero.getString(2), mensajero.getString(3), mensajero.getString(4), mensajero.getString(5), mensajero.getString(6));
+            }
+        } catch (SQLException ex) {
+            operacionExitosa = false;
+            System.out.println("Ocurrió un error: " + ex.toString());
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Cerramos la conexion
+            this.close(conn);
+        }
+
+        return cuentaVo;
+    }
+
     public boolean update() {
 
         sql = "UPDATE cuenta SET estado = ? WHERE idcuenta = ?";
@@ -141,7 +218,31 @@ public class CuentaDAO extends Conexion {
 
         return operacionExitosa;
     }
-    
+
+    public boolean retirarDinero(String cantidadRetirar) {
+
+        sql = "UPDATE cuenta SET saldo = saldo - ? WHERE idcuenta = ?";
+
+        try {
+            conn = this.getConnection();
+            puente = conn.prepareStatement(sql);
+            puente.setString(1, cantidadRetirar);
+            puente.setString(2, idCuenta);
+            puente.executeUpdate();
+
+            operacionExitosa = true;
+
+        } catch (SQLException ex) {
+            operacionExitosa = false;
+            System.out.println("Ocurrió un error al actualizar la cuenta: " + ex.toString());
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            this.close(conn);
+        }
+
+        return operacionExitosa;
+    }
+
     public boolean delete(String id) {
 
         sql = "DELETE FROM cuenta WHERE idcuenta = ?";
@@ -164,8 +265,7 @@ public class CuentaDAO extends Conexion {
 
         return operacionExitosa;
     }
-    
-    
+
     public CuentaVO consultarCuenta(String estado) throws SQLException {
 
         CuentaVO cuentaVO = null;
@@ -191,8 +291,7 @@ public class CuentaDAO extends Conexion {
         return cuentaVO;
 
     }
-    
-    
+
     public ArrayList<CuentaVO> listarCuenta(String estado) {
 
         //Crear Array, nombre del objeto + nombre del array 
@@ -214,7 +313,7 @@ public class CuentaDAO extends Conexion {
 
             }
 
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             Logger.getLogger(CuentaDAO.class.getName()).log(Level.SEVERE, null, e);
 
         } finally {
@@ -222,11 +321,10 @@ public class CuentaDAO extends Conexion {
             this.close(conn);
         }
 
-
         return listaCuenta;
 
     }
-    
+
     //Metodo para LISTAR
     public ArrayList<CuentaVO> listar() {
 
@@ -258,7 +356,5 @@ public class CuentaDAO extends Conexion {
         return listaCuentas;
 
     }
-
-
 
 }

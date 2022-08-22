@@ -1,4 +1,8 @@
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:setLocale value="es_CO" />
 <%@include file="cache.jsp" %>
+<%@include file="validarSesion.jsp" %>
+<%@include file="validarRolAdmin.jsp" %>
 <%@page import="java.util.List"%>
 <%@page import="ModeloVO.ClienteVO"%>
 <%@page import="ModeloDAO.ClienteDAO"%>
@@ -35,8 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%
-                        ClienteDAO clienteDao = new ClienteDAO();
+                    <%                        ClienteDAO clienteDao = new ClienteDAO();
                         ClienteVO clienteVo = null;
 
                         List<ClienteVO> clientes = clienteDao.select();
@@ -49,7 +52,7 @@
                     <tr>
                         <td><%= clienteVo.getIdCliente()%></td>
                         <td><%= clienteVo.getNombreCliente()%></td>
-                        <td><%= clienteVo.getCedulaCliente()%></td>
+                        <td><fmt:formatNumber value="<%= clienteVo.getCedulaCliente()%>" type="number" /></td>
                         <td><%= clienteVo.getTelefonoCliente()%></td>
                 <form action="${pageContext.request.contextPath}/Cliente" method="POST">
                     <input type="hidden" name="idCliente" value="<%= clienteVo.getIdCliente()%>">
@@ -63,7 +66,7 @@
                     <input type="hidden" name="cedulaCliente" value="<%= clienteVo.getCedulaCliente()%>">
                     <input type="hidden" name="opcion" value="3">
 
-                    <td class="text-center"><button type="buttom" class="bg-transparent border-0"><i class="fas fa-trash text-danger"></i></button></td>
+                    <td class="text-center"><button type="buttom" class="bg-transparent border-0"><%= clienteVo.getNombreCliente() == "Activo" ? "Inactivar" : "Activar"%></button></td>
                 </form>
                 </tr>
                 <%
@@ -72,6 +75,7 @@
                 </tbody>
             </table>
         </div>
+                     <jsp:include page="WEB-INF/paginas/comunes/footer.jsp" />
     </body>
 </html>
 <jsp:include page="WEB-INF/paginas/comunes/editarCliente.jsp" />

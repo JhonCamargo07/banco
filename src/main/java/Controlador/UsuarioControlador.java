@@ -37,7 +37,11 @@ public class UsuarioControlador extends HttpServlet {
 
         switch (opcion) {
             case 1: // Login
-                this.login(request, response, login, password);
+                if (password.equals("") || login.equals("")) {
+                    this.generarMensaje(request, response,"Datos erroneos", "Ningún campo puede ser nulo, completelos e intente nuevamente");
+                } else {
+                    this.login(request, response, login, password);
+                }
                 break;
             case 2: // Salir
                 this.logout(request, response);
@@ -53,13 +57,11 @@ public class UsuarioControlador extends HttpServlet {
         if (usuarioVo != null) {
             HttpSession sesion = request.getSession(true);
             sesion.setAttribute("usuario", usuarioVo);
-            response.sendRedirect("cliente.jsp");
+            response.sendRedirect("menu.jsp");
         } else {
-            request.setAttribute("titulo", "Datos erroneos");
-            request.setAttribute("mensaje", "No se encontraron registros con los datos suministrados");
             request.setAttribute("login", login);
             request.setAttribute("password", password);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            this.generarMensaje(request, response, "Datos erroneos", "No se encontraron registros con los datos suministrados");
         }
 
     }
@@ -74,8 +76,12 @@ public class UsuarioControlador extends HttpServlet {
 
         sesion.invalidate();
 
-        request.setAttribute("titulo", "Sesion cerrada");
-        request.setAttribute("mensaje", "La sesión se cerró con exito, sigue disfrutando de nuestros servicios");
+        this.generarMensaje(request, response, "Sesion cerrada", "La sesión se cerró con exito, sigue disfrutando de nuestros servicios");
+    }
+
+    private void generarMensaje(HttpServletRequest request, HttpServletResponse response, String titulo, String mensaje) throws ServletException, IOException {
+        request.setAttribute("titulo", titulo);
+        request.setAttribute("mensaje", mensaje);
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }
